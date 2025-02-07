@@ -96,13 +96,18 @@ Create test files inside the `__tests__` directory, for example:
 `__tests__/index.test.js`
 
 ```js
-import { render, screen } from '@testing-library/react';
-import Home from '../pages/index';
+import "@testing-library/jest-dom";
+import { render, screen } from "@testing-library/react";
+import Home from "../src/pages/index";
 
-test('renders homepage', () => {
-  render(<Home />);
-  const heading = screen.getByRole('heading', { name: /welcome to next\.js!/i });
-  expect(heading).toBeInTheDocument();
+describe("Home Page", () => {
+  it("renders a heading", () => {
+    render(<Home />);
+
+    const heading = screen.getByRole("heading", { level: 1 });
+
+    expect(heading).toBeInTheDocument();
+  });
 });
 ```
 
