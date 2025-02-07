@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export default function Home() {
   return (
     <div>
-      <h1>New heading but h2. Test PR 2 </h1>
+      <h1>Home</h1>
       <Link href="/about">About</Link>
     </div>
   );
