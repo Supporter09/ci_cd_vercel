@@ -5,15 +5,17 @@ name: CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "dev" ]
+    branches:
+      - dev
 
 jobs:
   test:
     name: Run Tests
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-lastest
+    if: github.event_name == 'pull_request' # Ensures tests only run on PRs
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
