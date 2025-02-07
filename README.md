@@ -1,6 +1,5 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
-## Getting Started
+# Getting Started
 
 First, run the development server:
 
@@ -14,27 +13,103 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Setting Up a Next.js Project with Jest for Testing
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## 1. Install Next.js
+Run the following command to create a new Next.js project:
+```sh
+npx create-next-app@latest
+```
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## 2. Install Necessary Testing Packages
+Install Jest and related packages for testing with the following command:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+Using npm:
+```sh
+npm install -D jest jest-environment-jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom ts-node
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Using yarn:
+```sh
+yarn add -D jest jest-environment-jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom ts-node
+```
 
-## Learn More
+Using pnpm:
+```sh
+pnpm install -D jest jest-environment-jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom ts-node
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 3. Create a Basic Jest Configuration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+Using npm:
+```sh
+npm init jest@latest
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Using yarn:
+```sh
+yarn create jest@latest
+```
 
-## Deploy on Vercel
+Using pnpm:
+```sh
+pnpm create jest@latest
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 4. Update Jest Configuration for Next.js
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+Modify `jest.config.js` to use `next/jest` for compatibility with Next.js:
+
+```js
+const nextJest = require('next/jest');
+
+/** @type {import('jest').Config} */
+const createJestConfig = nextJest({
+  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
+  dir: './',
+});
+
+// Add any custom config to be passed to Jest
+const config = {
+  coverageProvider: 'v8',
+  testEnvironment: 'jsdom',
+  // Add more setup options before each test is run
+  // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+};
+
+// Export Jest configuration
+module.exports = createJestConfig(config);
+```
+
+## 5. Add Jest Setup File
+
+Create a `jest.setup.js` file to configure Jest with additional setup options:
+
+```js
+import '@testing-library/jest-dom';
+```
+
+## 6. Write Some Tests
+
+Create test files inside the `__tests__` directory, for example:
+
+`__tests__/index.test.js`
+
+```js
+import { render, screen } from '@testing-library/react';
+import Home from '../pages/index';
+
+test('renders homepage', () => {
+  render(<Home />);
+  const heading = screen.getByRole('heading', { name: /welcome to next\.js!/i });
+  expect(heading).toBeInTheDocument();
+});
+```
+
+Run tests using:
+```bash
+npm test
+# or
+yarn test
+# or
+pnpm test
